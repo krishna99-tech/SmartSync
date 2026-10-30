@@ -1,5 +1,14 @@
 /.github/workflows
 
+# Firebase Credentials & Secret Keys
+**/firebase_options.dart
+**/google-services.json
+**/GoogleService-Info.plist
+firebaseConfig.js
+*.env
+*.env.*
+serviceAccountKey.json
+
 # Flutter / Dart
 .dart_tool/
 **/.dart_tool/
