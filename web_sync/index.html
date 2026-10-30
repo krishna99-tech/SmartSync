@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSync - Next-Gen Flutter Smart Home Control</title>
+    <link rel="icon" href="style/splash_icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            /* Minimalist, Clean Theme Palette (No Neon, No Background Blue) */
+            --bg-base: #09090b;
+            --bg-surface: #121215;
+            --bg-surface-elevated: #18181c;
+            --bg-card: #141417;
+            --border-subtle: rgba(255, 255, 255, 0.07);
+            --border-hover: rgba(255, 255, 255, 0.18);
+
+            --text-main: #FFFFFF;
+            --text-muted: #A1A1AA;
+            --text-sub: #71717A;
+
+            --primary: #F87E50;
+            --accent: #F87E50;
+            --online: #10B981;
+            --offline: #EF4444;
+
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+            --transition: all 0.25s ease;
+        }
+
+        /* Clean White / Light Theme */
+        [data-theme="light"] {
+            --bg-base: #FFFFFF;
+            --bg-surface: #F8FAFC;
+            --bg-surface-elevated: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --border-subtle: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.16);
+
+            --text-main: #0F172A;
+            --text-muted: #475569;
+            --text-sub: #64748B;
+
+            --primary: #F87E50;
+            --accent: #F87E50;
+            --online: #10B981;
+            --offline: #EF4444;
+        }
+
+        [data-theme="light"] .bg-cyber {
+            background: #FFFFFF;
+        }
+
+        [data-theme="light"] .bg-grid {
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse at center, black 60%, transparent 90%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 90%);
+        }
+
+        [data-theme="light"] .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .nav-brand {
+            color: #0F172A;
+        }
+
+        [data-theme="light"] .nav-links a {
+            color: #64748B;
+        }
+
+        [data-theme="light"] .nav-links a:hover {
+            color: #0F172A;
+        }
+
+        [data-theme="light"] .btn-primary {
+            background: #0F172A;
+            color: #FFFFFF;
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: #1E293B;
+        }
+
+        [data-theme="light"] .btn-secondary {
+            background: #FFFFFF;
+            color: #0F172A;
+            border-color: rgba(0, 0, 0, 0.12);
+        }
+
+        [data-theme="light"] .download-btn-large {
+            background: #0F172A;
+            color: #FFFFFF;
+        }
+
+        [data-theme="light"] .nav-logo-box img {
+            filter: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Subtle Neutral Background Grid (Zero Blue Tint, Zero Neon Glow) */
+        .bg-cyber {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: #09090b;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Clean progress line */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: var(--primary);
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Clean Minimal Navbar */
+        .navbar {
+            position: sticky;
+            top: 16px;
+            z-index: 1000;
+            margin: 0 auto 30px;
+            max-width: 1200px;
+            padding: 12px 24px;
+            border-radius: 999px;
+            background: rgba(18, 18, 21, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .nav-logo-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-logo-box img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-title span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .theme-toggle-btn {
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-surface-elevated);
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--border-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Floating Theme Pill at bottom-right */
+        .floating-theme-pill {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-hover);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: var(--transition);
+        }
+
+        .floating-theme-pill:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+        }
+
+        .nav-cta-btn {
+            background: var(--text-main);
+            color: var(--bg-base);
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .nav-cta-btn:hover {
+            background: #e4e4e7;
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--online);
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--online);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 720px;
+            margin: 0 auto 36px;
+            font-weight: 400;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 44px;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            padding: 14px 32px;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background: #f4f4f5;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-size: 0.98rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-surface-elevated);
+            border-color: var(--border-hover);
+        }
+
+        .hero-badges {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .hero-badge-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-badge-item i {
+            color: var(--text-muted);
+        }
+
+        /* Ecosystem Visual Section */
+        .ecosystem-section {
+            margin: 50px 0 90px;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            color: var(--text-muted);
+            max-width: 660px;
+            margin: 0 auto;
+            font-size: 1.02rem;
+        }
+
+        .ecosystem-visual-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 36px;
+        }
+
+        .ecosystem-visual-card img {
+            width: 100%;
+            height: auto;
+            border-radius: calc(var(--radius-lg) - 6px);
+            display: block;
+        }
+
+        /* Subsystems Grid */
+        .subsystems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 18px;
+        }
+
+        .subsystem-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            transition: var(--transition);
+        }
+
+        .subsystem-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-hover);
+        }
+
+        .subsystem-icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            font-size: 1.15rem;
+            margin-bottom: 14px;
+        }
+
+        .subsystem-item h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .subsystem-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ========================================================
+           CLEAN DOWNLOAD BOX (NO NEON GLOW, NO BLUE BG)
+           ======================================================== */
+        .download-showcase-section {
+            margin: 60px 0 90px;
+            position: relative;
+        }
+
+        .flutter-download-box {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            padding: 44px;
+            display: grid;
+            grid-template-columns: 1.25fr 0.95fr;
+            gap: 44px;
+            align-items: center;
+            position: relative;
+        }
+
+        .box-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .badge-flutter {
+            background: var(--bg-surface-elevated);
+            color: #fff;
+            border: 1px solid var(--border-subtle);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-stable {
+            background: rgba(16, 185, 129, 0.08);
+            color: var(--online);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .box-title {
+            font-size: 2.1rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .box-desc {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        .feature-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .feature-bullets li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92rem;
+            color: #D4D4D8;
+        }
+
+        .feature-bullets li i {
+            color: var(--online);
+            font-size: 0.85rem;
+        }
+
+        .box-action-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .meta-item span {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            font-weight: 700;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .meta-item strong {
+            font-size: 0.94rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .download-btn-large {
+            background: #fff;
+            color: #000;
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            font-size: 1.05rem;
+            font-weight: 900;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            margin-bottom: 14px;
+            border: none;
+        }
+
+        .download-btn-large:hover {
+            background: #f4f4f5;
+            transform: translateY(-2px);
+        }
+
+        .secondary-download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .secondary-download-link:hover {
+            color: #fff;
+        }
+
+        .security-badge-box {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--online);
+            font-weight: 700;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin: 60px 0 90px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-hover);
+        }
+
+        .feature-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        /* Architecture Section */
+        .architecture-section {
+            margin: 60px 0 90px;
+        }
+
+        .arch-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .arch-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            transition: var(--transition);
+        }
+
+        .arch-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .arch-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .arch-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .arch-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Setup Timeline Section */
+        .steps-section {
+            margin: 60px 0 90px;
+        }
+
+        .steps-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .step-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        .step-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .step-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .step-item h4 {
+            font-size: 1.08rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .step-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin: 60px 0 90px;
+            max-width: 840px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .faq-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-card.open {
+            border-color: var(--border-hover);
+        }
+
+        .faq-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .faq-header i {
+            transition: var(--transition);
+            color: var(--text-muted);
+        }
+
+        .faq-card.open .faq-header i {
+            transform: rotate(180deg);
+        }
+
+        .faq-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            padding: 0 24px;
+        }
+
+        .faq-card.open .faq-body {
+            padding-bottom: 20px;
+            max-height: 250px;
+        }
+
+        /* Clean Minimal Footer */
+        .site-footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
+            padding: 60px 0 32px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col-brand h3 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+        }
+
+        .footer-col-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .footer-links-col h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            color: var(--text-main);
+        }
+
+        .footer-links-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links-col ul a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .footer-links-col ul a:hover {
+            color: var(--text-main);
+        }
+
+        .credits-card {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+        }
+
+        .credits-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .credits-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .credits-card strong {
+            color: var(--text-main);
+        }
+
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.84rem;
+            color: var(--text-sub);
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--online);
+            font-weight: 600;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .flutter-download-box {
+                grid-template-columns: 1fr;
+                padding: 30px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2.1rem;
+            }
+
+            .hero-desc {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="bg-cyber"></div>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+
+        <!-- Minimal Navbar -->
+        <nav class="navbar">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo-box">
+                    <img src="style/splash_icon.svg" alt="SmartSync Logo">
+                </div>
+                <div class="nav-title">
+                    Smart<span>Sync</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#ecosystem">Ecosystem</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#download">Download APK</a></li>
+                <li><a href="#guide">Setup Guide</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Theme"
+                    title="Switch Theme (Dark / White)">
+                    <i class="fas fa-sun" id="themeIcon"></i>
+                </button>
+                <a href="#download" class="nav-cta-btn">
+                    <i class="fas fa-download"></i> Get APK
+                </a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="status-pill">
+                <span class="status-dot"></span>
+                <span>ESP32 IOT ECOSYSTEM ACTIVE • 100% SECURE</span>
+            </div>
+            <h1>
+                Next-Gen Smart Home Control, <br>
+                Engineered with Flutter.
+            </h1>
+            <p class="hero-desc">
+                Safer • Smarter • More Comfortable. Experience sub-second device control, high-precision telemetry, and
+                unified ESP32 automation in an all-new Flutter mobile architecture.
+            </p>
+            <div class="hero-actions">
+                <a href="#download" class="btn-primary">
+                    <i class="fab fa-android"></i> Download Flutter APK (v2.0)
+                </a>
+                <a href="#ecosystem" class="btn-secondary">
+                    <i class="fas fa-house-signal"></i> Explore Home Ecosystem
+                </a>
+            </div>
+            <div class="hero-badges">
+                <div class="hero-badge-item">
+                    <i class="fas fa-bolt"></i> Realtime WebSockets
+                </div>
+                <div class="hero-badge-item">
+                    <i class="fas fa-shield-halved"></i> AES Encrypted Sync
+                </div>
+                <div class="hero-badge-item">
+                    <i class="fas fa-mobile-screen"></i> Android 8.0+ Ready
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================================================
+             INTERACTIVE SMART HOME ECOSYSTEM (SVG SHOWCASE)
+             ======================================================== -->
+        <section class="ecosystem-section" id="ecosystem">
+            <div class="section-header">
+                <span class="section-tag">Unified Topology</span>
+                <h2 class="section-title">The Complete Smart Home Ecosystem</h2>
+                <p class="section-sub">
+                    From indoor lighting and climate to perimeter security and automated irrigation, SmartSync connects
+                    every aspect of your modern home to your smartphone.
+                </p>
+            </div>
+
+            <!-- Vector SVG Ecosystem Infographic with Live Glow Markers -->
+            <div class="ecosystem-visual-card">
+                <img src="style/smart_home_ecosystem.svg" alt="Smart Home Ecosystem Topology">
+            </div>
+
+            <!-- Subsystem Details Grid -->
+            <div class="subsystems-grid">
+                <div class="subsystem-item">
+                    <div class="subsystem-icon-box">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h4>Smart Lighting</h4>
+                    <p>Sub-second toggle and dimming relays for all living spaces, ambient lighting, and exterior
+                        fixtures.</p>
+                </div>
+
+                <div class="subsystem-item">
+                    <div class="subsystem-icon-box">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <h4>Climate & AC Control</h4>
+                    <p>Precise HVAC and air conditioner management maintaining comfortable temperatures with
+                        energy-saving modes.</p>
+                </div>
+
+                <div class="subsystem-item">
+                    <div class="subsystem-icon-box">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4>Security & Smart Lock</h4>
+                    <p>Automated biometric door locks, security camera telemetry, and perimeter protection with instant
+                        alerts.</p>
+                </div>
+
+                <div class="subsystem-item">
+                    <div class="subsystem-icon-box">
+                        <i class="fas fa-charging-station"></i>
+                    </div>
+                    <h4>EV Charging & Appliances</h4>
+                    <p>Scheduled vehicle charging sessions and smart appliance relays to optimize off-peak electricity
+                        rates.</p>
+                </div>
+
+                <div class="subsystem-item">
+                    <div class="subsystem-icon-box">
+                        <i class="fas fa-faucet-drip"></i>
+                    </div>
+                    <h4>Smart Irrigation</h4>
+                    <p>Automated garden sprinklers and water management synced to local environmental conditions.</p>
+                </div>
+
+                <div class="subsystem-item">
+                    <div class="subsystem-icon-box">
+                        <i class="fas fa-mobile-screen-button"></i>
+                    </div>
+                    <h4>Pocket Command Center</h4>
+                    <p>Your Flutter mobile client acts as the central control bridge with customized names and tactile
+                        feedback.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             EXCLUSIVE DOWNLOAD SECTION - ONLY THE FLUTTER APK
+             ======================================================== -->
+        <section class="download-showcase-section" id="download">
+            <div class="section-header">
+                <span class="section-tag">Direct Package Release</span>
+                <h2 class="section-title">Download Official Flutter App</h2>
+                <p class="section-sub">
+                    All previous legacy versions (v1.0 - v1.6) have been removed and superseded by this single,
+                    optimized, high-performance Flutter build.
+                </p>
+            </div>
+
+            <div class="flutter-download-box">
+                <div class="box-content-left">
+                    <div class="box-badge-row">
+                        <span class="badge-flutter"><i class="fab fa-flutter"></i> Flutter Engine</span>
+                        <span class="badge-stable"><i class="fas fa-check-circle"></i> Official Release v2.1.0</span>
+                    </div>
+                    <h3 class="box-title">SmartHome v2.1.0</h3>
+                    <p class="box-desc">
+                        Re-architected from the ground up with Google Flutter. Features dual-tab navigation (Home &
+                        Profile), scalable 1-to-8 relay channels, real-time hardware telemetry, automatic system theme
+                        adaptation, and one-tap UUID token provisioning.
+                    </p>
+
+                    <ul class="feature-bullets">
+                        <li><i class="fas fa-check"></i> Bottom Tab Navigation: Dedicated Home control center & Profile
+                            instance hub</li>
+                        <li><i class="fas fa-check"></i> Scalable Multi-Relay Engine: Supports 1 up to 8 dynamic
+                            hardware channels</li>
+                        <li><i class="fas fa-check"></i> Automatic Theme Engine: Auto-syncs between OLED Dark and Light
+                            system modes</li>
+                        <li><i class="fas fa-check"></i> One-Tap UUID Key: Masked instance token with instant clipboard
+                            copy for ESP32 firmware</li>
+                        <li><i class="fas fa-check"></i> Bi-directional ESP32 hardware handshake & live heartbeat</li>
+                        <li><i class="fas fa-check"></i> Dynamic device re-naming and icon switching (Lights, AC, Fans,
+                            Plugs)</li>
+                    </ul>
+                </div>
+
+                <div class="box-action-panel">
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <span>Version</span>
+                            <strong>2.1.0 (Flutter Dual-Tab)</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>Package Name</span>
+                            <strong>com.electrogadgedc</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>OS Minimum</span>
+                            <strong>Android 8.0+ (API 21+)</strong>
+                        </div>
+                        <div class="meta-item">
+                            <span>Build Format</span>
+                            <strong>Release APK (Optimized)</strong>
+                        </div>
+                    </div>
+
+                    <!-- Direct download of the generated APK from GitHub Releases -->
+                    <a href="https://github.com/krishna99-tech/SmartSync/releases/download/v2.0.0/app-release.apk" class="download-btn-large">
+                        <i class="fas fa-download"></i> Download Release APK
+                    </a>
+
+                    <a href="https://github.com/krishna99-tech/SmartSync/releases" target="_blank"
+                        class="secondary-download-link">
+                        <i class="fab fa-github"></i> View GitHub Releases
+                    </a>
+
+                    <div class="security-badge-box">
+                        <i class="fas fa-shield-halved"></i> Verified SHA-256 Clean & Malware Free
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Architecture Deep Dive -->
+        <section class="architecture-section" id="architecture">
+            <div class="section-header">
+                <span class="section-tag">System Architecture</span>
+                <h2 class="section-title">How SmartSync Works</h2>
+                <p class="section-sub">
+                    Three interconnected layers guarantee instant responsiveness, offline awareness, and maximum
+                    security.
+                </p>
+            </div>
+
+            <div class="arch-steps-grid">
+                <div class="arch-card">
+                    <span class="arch-badge">Edge Hardware</span>
+                    <h3>1. ESP32 Node Relays</h3>
+                    <p>Micro-controllers execute low-level C++ firmware, listening directly on secure WebSocket channels
+                        and pulsing hardware pins for lights, AC units, and switches.</p>
+                </div>
+
+                <div class="arch-card">
+                    <span class="arch-badge">Cloud Engine</span>
+                    <h3>2. Firebase Realtime DB</h3>
+                    <p>Push-based data trees synchronize state changes globally under 100ms. An automated heartbeat
+                        pings the node to immediately identify if the controller loses power or Wi-Fi.</p>
+                </div>
+
+                <div class="arch-card">
+                    <span class="arch-badge">Client Layer</span>
+                    <h3>3. Flutter Mobile App</h3>
+                    <p>Compiled natively to machine code for Android. Features masked instance keys, tactile touch
+                        triggers, customizable device names, and automatic credential handoffs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Features Grid -->
+        <section class="features-section" id="features">
+            <div class="section-header">
+                <span class="section-tag">Capabilities</span>
+                <h2 class="section-title">Built for Performance & Security</h2>
+                <p class="section-sub">
+                    Engineered to provide immediate feedback, unbreakable reliability, and effortless control over your
+                    smart home hardware.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Sub-Second Latency</h3>
+                    <p>Direct WebSocket duplexing streams state changes between your smartphone and ESP32 relays in
+                        under 100 milliseconds.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>Heartbeat Telemetry</h3>
+                    <p>Live controller status indicator displays whether your ESP32 controller is connected to power and
+                        local Wi-Fi in real time.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-sliders"></i>
+                    </div>
+                    <h3>Customizable Presets</h3>
+                    <p>Switch between light, air conditioning, fan, and smart power plug configurations with custom
+                        naming right on your dashboard.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3>Encrypted Instance Key</h3>
+                    <p>Personal masked instance keys allow private and secure association between your dedicated
+                        hardware node and cloud profile.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>Deep Link Recovery</h3>
+                    <p>Automated app linking catches password reset links sent to your inbox and routes directly into
+                        the secured credential updater.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3>OLED-Optimized Dark Mode</h3>
+                    <p>Ultra-deep neutral dark palette with high-contrast typography, clean borders, and zero intrusive
+                        glare.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step-by-Step Installation & Setup Guide -->
+        <section class="steps-section" id="guide">
+            <div class="section-header">
+                <span class="section-tag">Quick Deployment</span>
+                <h2 class="section-title">How to Install and Setup</h2>
+                <p class="section-sub">Get your smart home control center running in 4 easy steps.</p>
+            </div>
+
+            <div class="steps-timeline">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <h4>Download APK</h4>
+                    <p>Click the download button above to grab the official release APK file directly to your Android
+                        device.</p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <h4>Grant Unknown Sources</h4>
+                    <p>When prompted by your browser, enable "Install unknown apps" in Android Security Settings.</p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <h4>Register Your Account</h4>
+                    <p>Launch SmartHome, tap "Create New Account", and enter your email and password to provision your
+                        devices.</p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <h4>Sync Your ESP32</h4>
+                    <p>Copy your Instance Key from the dashboard into your ESP32 firmware config to enjoy instant remote
+                        control.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive FAQ Accordion -->
+        <section class="faq-section" id="faq">
+            <div class="section-header">
+                <span class="section-tag">Common Inquiries</span>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-card open">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span>Why was the app upgraded to Flutter?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body">
+                        The Flutter upgrade replaces the previous hybrid React Native framework with a high-performance
+                        Ahead-Of-Time (AOT) compiled native binary. This delivers instant app startup, ultra-responsive
+                        120 FPS animations, and seamless Firebase Realtime Database socket communication.
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span>Where are previous versions (v1.0 - v1.6)?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body">
+                        All older versions have been phased out due to security patches, improved WebSocket protocol
+                        formats, and the migration to the unified Flutter codebase. The new v2.0.0 APK is
+                        backwards-compatible with all existing ESP32 installations.
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span>How does the ESP32 know my user account?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body">
+                        Your account has a unique 28-character Instance Key (Firebase User ID) shown in the app
+                        dashboard. Flashing this UID into your ESP32 Arduino / PlatformIO sketch creates a dedicated
+                        private database channel.
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <div class="faq-header" onclick="toggleFaq(this)">
+                        <span>Is my data private and secure?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-body">
+                        Yes. All communication is protected through TLS 1.3 encryption and authenticated via Firebase
+                        Security Rules, ensuring only your verified account can read or write to your devices.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- End .container -->
+
+    <!-- Minimal Clean Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+
+                <!-- Brand Summary -->
+                <div class="footer-col-brand">
+                    <h3>
+                        <div class="nav-logo-box" style="width:30px;height:30px;">
+                            <img src="style/splash_icon.svg" alt="SmartSync" style="width:16px;height:16px;">
+                        </div>
+                        SmartSync
+                    </h3>
+                    <p>
+                        Next-generation IoT automation platform connecting custom ESP32 microcontroller relays with a
+                        native Flutter mobile client through real-time cloud data pipelines.
+                    </p>
+                    <div style="font-size:0.85rem; color:var(--text-sub);">
+                        Center of Excellence (COE) • IoT Ecosystem
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="footer-links-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#ecosystem">Home Ecosystem</a></li>
+                        <li><a href="#download">Download APK</a></li>
+                        <li><a href="#features">Platform Features</a></li>
+                        <li><a href="#architecture">IoT Architecture</a></li>
+                        <li><a href="#guide">Installation Guide</a></li>
+                    </ul>
+                </div>
+
+                <!-- Development Resources -->
+                <div class="footer-links-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://thingsnxt.com">Thingsnxt</a></li>
+                        <li><a href="https://github.com/krishna99-tech/SmartSync" target="_blank"><i
+                                    class="fab fa-github"></i> GitHub Repository</a></li>
+                        <li><a href="https://github.com/krishna99-tech/SmartSync/issues" target="_blank"><i
+                                    class="fas fa-bug"></i> Report Issue</a></li>
+                        <li><a href="https://firebase.google.com/" target="_blank"><i class="fas fa-fire"></i> Firebase
+                                RTDB</a></li>
+                        <li><a href="https://flutter.dev/" target="_blank"><i class="fab fa-flutter"></i> Flutter
+                                Engine</a></li>
+                    </ul>
+                </div>
+
+                <!-- Leadership & Credits -->
+                <div class="footer-links-col">
+                    <h4>Project Credits</h4>
+                    <div class="credits-card">
+                        <p>Project Guide: <strong>Dr. Arun C.A</strong></p>
+                        <p>Lead Developer: <strong>krishna</strong></p>
+                        <p>Ecosystem: <strong>COE-IOT ECOSYSTEM</strong></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    © 2026 SmartSync Control App. All Rights Reserved.
+                </div>
+                <div class="footer-status">
+                    <span class="status-dot"></span>
+                    <span>Systems Operational • Clean Architecture</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Theme Toggle (White / Dark)
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('smartsync_theme', 'light');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('smartsync_theme', 'dark');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('smartsync_theme');
+        if (savedTheme === 'light') {
+            applyTheme('light');
+        } else if (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            applyTheme('light');
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+                applyTheme(isLight ? 'dark' : 'light');
+            });
+        }
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // FAQ Toggle
+        function toggleFaq(el) {
+            const card = el.parentElement;
+            card.classList.toggle('open');
+        }
+    </script>
+</body>
+
+</html>

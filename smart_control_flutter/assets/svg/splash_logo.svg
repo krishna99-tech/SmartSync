@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#EFF6FF"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" stroke="#DBEAFE" stroke-width="2"/>
+  <!-- Modern Clean Smart Home Roof & Walls -->
+  <path d="M19 28L32 17L45 28V46C45 47.1046 44.1046 48 43 48H21C19.8954 48 19 47.1046 19 46V28Z" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Smart IoT Wi-Fi Connectivity Waves -->
+  <path d="M26 33C27.6569 31.3431 30.1569 30.5 32 30.5C33.8431 30.5 36.3431 31.3431 38 33" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28.5 37C29.4941 36.0059 30.8224 35.5 32 35.5C33.1776 35.5 34.5059 36.0059 35.5 37" stroke="#2563EB" stroke-width="2" stroke-linecap="round"/>
+  <!-- Central Pulse Node -->
+  <circle cx="32" cy="41.5" r="2" fill="#2563EB"/>
+</svg>
