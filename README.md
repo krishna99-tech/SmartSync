@@ -54,7 +54,7 @@ All detailed setup guides, project structures, security rules, and ecosystem res
 
 ## 👨‍💻 Author & Credits
 
-- **Author**: [Venkata Krishna](https://github.com/krishna99-tech)
+- **Author**: [Krishna](https://github.com/krishna99-tech)
 - **Ecosystem**: COE-IOT ECOSYSTEM
 
 ---
