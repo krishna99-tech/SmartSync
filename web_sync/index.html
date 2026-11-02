@@ -923,8 +923,8 @@
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
-            gap: 40px;
+            grid-template-columns: 1.3fr 1fr 1fr 1fr 1.2fr;
+            gap: 36px;
             margin-bottom: 50px;
         }
 
@@ -990,6 +990,16 @@
 
         .credits-card strong {
             color: var(--text-main);
+        }
+
+        .credits-card a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .credits-card a:hover {
+            color: var(--primary);
         }
 
         .footer-bottom {
@@ -1497,7 +1507,7 @@
                         SmartSync
                     </h3>
                     <p>
-                        Next-generation IoT automation platform connecting custom ESP32 microcontroller relays with a
+                        Next-generation IoT automation platform connecting custom microcontroller relays with a
                         native Flutter mobile client through real-time cloud data pipelines.
                     </p>
                     <div style="font-size:0.85rem; color:var(--text-sub);">
@@ -1517,11 +1527,23 @@
                     </ul>
                 </div>
 
+                <!-- External Websites -->
+                <div class="footer-links-col">
+                    <h4>External Websites</h4>
+                    <ul>
+                        <li><a href="https://thingsnxt.com" target="_blank"><i class="fas fa-globe"></i> Thingsnxt</a></li>
+                        <li><a href="https://thingsnxt.vercel.app" target="_blank"><i class="fas fa-network-wired"></i> ThingsNxt Platform</a></li>
+                        <li><a href="https://utility.thingsnxt.com/kronos/v2/overview" target="_blank"><i class="fas fa-chart-line"></i> UtilityNexus</a></li>
+                        <li><a href="https://cloud.thingsnxt.com" target="_blank"><i class="fas fa-cloud-arrow-up"></i> Nxtzenta</a></li>
+                        <li><a href="https://fullstack-auth-platform-topaz.vercel.app/" target="_blank"><i class="fas fa-fingerprint"></i> AuthLog Platform</a></li>
+                        <li><a href="https://cyberkit-mu.vercel.app/" target="_blank"><i class="fas fa-shield-halved"></i> Cyberkit</a></li>
+                    </ul>
+                </div>
+
                 <!-- Development Resources -->
                 <div class="footer-links-col">
                     <h4>Resources</h4>
                     <ul>
-                        <li><a href="https://thingsnxt.com">Thingsnxt</a></li>
                         <li><a href="https://github.com/krishna99-tech/SmartSync" target="_blank"><i
                                     class="fab fa-github"></i> GitHub Repository</a></li>
                         <li><a href="https://github.com/krishna99-tech/SmartSync/issues" target="_blank"><i
@@ -1537,6 +1559,7 @@
                 <div class="footer-links-col">
                     <h4>Project Credits</h4>
                     <div class="credits-card">
+                        <p>Author: <a href="https://github.com/krishna99-tech" target="_blank"><i class="fab fa-github"></i> <strong>Venkata Krishna</strong></a></p>
                         <p>Ecosystem: <strong>COE-IOT ECOSYSTEM</strong></p>
                     </div>
                 </div>
